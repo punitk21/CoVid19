@@ -2,7 +2,7 @@
 """
 Created on Tue Mar 24 18:00:28 2020
 
-@author: Annu
+@author: Punit
 """
 #%%
 import wget
@@ -14,12 +14,24 @@ import tabula
 import pandas as pd
 import numpy as np
 print('Package Imported Now Data Import')
-
+from datetime import datetime, timedelta
 
 #%%
 os.chdir(r"E:\Roushan\Project\Covid\Data")
 #%%
-url = 'https://www.who.int/docs/default-source/coronaviruse/situation-reports/20200323-sitrep-63-covid-19.pdf'
+current_date = datetime.strftime(datetime.now() - timedelta(1), '%Y-%m-%d').__str__().replace('-', '')
+
+from datetime import datetime
+then = datetime(2020, 3,26)        # Random date in the past
+now  = datetime.now()                         # Now
+duration = (now - then).days 
+i = str(65+duration)
+ 
+ 
+fixed_url = "https://www.who.int/docs/default-source/coronaviruse/situation-reports/"
+dynamic_url = current_date+"-sitrep-"+i+"-covid-19.pdf"
+url = fixed_url+ dynamic_url
+#url = 'https://www.who.int/docs/default-source/coronaviruse/situation-reports/20200323-sitrep-63-covid-19.pdf'
 urllib.request.urlretrieve(url, "filename.pdf")
 
 #%%
@@ -41,15 +53,34 @@ while res == False:
         actual_page = actual_page-1
         print(actual_page)
         chk_pdf = tabula.read_pdf("filename.pdf",pages=actual_page)
-        tmp_result = chk_pdf['Territories**'].str.contains("Grand total")
+        col_nm = chk_pdf.columns
+        tmp_result = chk_pdf[col_nm[0]].str.contains("Grand total")
         res = True in tmp_result.unique()
         print(actual_page)
+    except AttributeError:
+        print("working")
+    except TypeError:
+        print("working")
+#%%
+start_page =0
+res= False
+while res == False:
+    try:
+        start_page = start_page+1
+        print(start_page)
+        chk_pdf = tabula.read_pdf("filename.pdf",pages=start_page)
+        col_nm = chk_pdf.columns
+        tmp_result = chk_pdf[col_nm[0]].str.contains("China")
+        res = True in tmp_result.unique()
+        print(start_page)
+    except AttributeError:
+        print("working")
     except TypeError:
         print("working")
 #%%
 #import camelot
 temp_pdf = pd.DataFrame()       
-for i in range(1,actual_page+1):
+for i in range(start_page,actual_page+1):
     print(i)
     temp  = tabula.read_pdf("filename.pdf",pages=i,multiple_tables=True)
     temp_pdf = temp_pdf.append(temp)
@@ -82,8 +113,8 @@ base_data[cols_names[0]] = np.where(base_data[cols_names[0]].isnull(), base_data
 
 
 #%% Data Bifurgation
-
-null_data = base_data[base_data[' Transmission § classification '].isnull()].index.tolist()
+colu = base_data.columns
+null_data = base_data[base_data[colu[5]].isnull()].index.tolist()
 null_data.insert(0, 0)
 subs = []
 for i in range(0,len(null_data)-1):
@@ -94,17 +125,3 @@ for i in range(0,len(null_data)-1):
     name = temp[cols_names[0]].iloc[0]
     globals()['{}'.format(name)] = temp
     subs.append(globals()['{}'.format(name)])
-    
-#%%
-from geopy.geocoders import Nominatim, GoogleV3
-
-def main():
-	io = pandas.read_csv('census-historic-population-borough.csv', index_col=None, header=0, sep=",")
-
-def get_latitude(x):
-  return x.latitude
-
-def get_longitude(x):
-  return x.longitude
-
-geolocator = Nominatim()    
