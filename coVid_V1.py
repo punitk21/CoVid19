@@ -17,7 +17,7 @@ print('Package Imported Now Data Import')
 from datetime import datetime, timedelta
 
 #%%
-os.chdir(r"E:\Roushan\Project\Covid\Data")
+os.chdir(r"E:\Punit\Project\Covid\Data")  ## Folder name where you want to download the PDF report
 #%%
 current_date = datetime.strftime(datetime.now() - timedelta(1), '%Y-%m-%d').__str__().replace('-', '')
 
