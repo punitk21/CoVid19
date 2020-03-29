@@ -1,7 +1,7 @@
 # CoVid19
 This Code is about Extracting the Table From WHO daily Report
 
-This Code mainly extract the current PDF File from WHO and extract the main table and coverts into multiple sub table basded on the dats .
+This Code mainly extract the current PDF File from WHO and extract the main table and coverts into multiple sub table based on the data avialable in th report .
 
 Just Add your path where you will save the file . 
 
