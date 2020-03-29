@@ -96,9 +96,9 @@ initial = temp_pdf[temp_pdf[0].str.startswith('Reporting Country/')== True].inde
 #last = temp_pdf.loc[temp_pdf[0].str.startswith('IV. MANU')== True].index[0]
 
 base_data = temp_pdf.drop(index = list(range(0,initial-1)))
-headers= base_data[base_data.index.isin(list(range(initial-1,initial+4)))]   
+headers= base_data[base_data.index.isin(list(range(initial-1,initial+3)))]   
 
-base_data = base_data.drop(index = list(range(initial-1,initial+4)))
+base_data = base_data.drop(index = list(range(initial-1,initial+3)))
 
 
 header_concat = headers.T.fillna('')
