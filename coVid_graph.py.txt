@@ -133,7 +133,7 @@ for i in range(0,len(null_data)-1):
 import seaborn as sns
 sns.set()
 
-i=3
+i=2
 
 cols  = subs[i].columns
 cols_0 = subs[i].iloc[0,0]
@@ -142,7 +142,7 @@ subs[5]=subs[i].rename(columns = {cols[0]:cols_0})
 cols  = subs[i].columns
 plot_data = subs[i].dropna()
 
-plot_data = plot_data.iloc[0:17,]
+#plot_data = plot_data.iloc[0:17,]
 
 df = plot_data[cols[0:5]]
 df[[cols[1]]]= df[[cols[1]]].astype(int)
@@ -152,8 +152,10 @@ df[[cols[4]]]= df[[cols[4]]].astype(int)
 
 #df = df.T
 #colum = df.columns
-
-plt = df.set_index(cols[0]).plot(kind='bar', stacked=True)
+try:
+    plt = df.set_index(cols[0]).plot(kind='bar', stacked=True)
+except TypeError:
+    print("No Data is Available , Change the Value of i ")
 plt.set_title('Covid19'+" " + current_date)
 plt.set_xlabel('Country Name')
 plt.set_ylabel('Count')
